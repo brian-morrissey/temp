@@ -1,0 +1,56 @@
+curl -X POST \
+  -H "Content-Type: application/json" \
+  --data @- \
+  -k https://sysdig-agent-clustershield.sysdig-agent.svc.cluster.local:6443/k8s-audit <<EOF
+{
+  "apiVersion": "admission.k8s.io/v1",
+  "kind": "AdmissionReview",
+  "request": {
+    "uid": "a-unique-id-for-this-request",
+    "kind": {
+      "group": "",
+      "version": "v1",
+      "kind": "Namespace"
+    },
+    "resource": {
+      "group": "",
+      "version": "v1",
+      "resource": "namespaces"
+    },
+    "requestKind": {
+      "group": "",
+      "version": "v1",
+      "kind": "Namespace"
+    },
+    "requestResource": {
+      "group": "",
+      "version": "v1",
+      "resource": "namespaces"
+    },
+    "name": "hello-world",
+    "namespace": "",
+    "operation": "CREATE",
+    "userInfo": {
+      "username": "system:serviceaccount:kube-system:default",
+      "uid": "some-user-uid",
+      "groups": ["system:serviceaccounts", "system:serviceaccounts:kube-system", "system:authenticated"]
+    },
+    "object": {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "name": "hello-world",
+        "creationTimestamp": null
+      },
+      "spec": {},
+      "status": {}
+    },
+    "oldObject": null,
+    "dryRun": false,
+    "options": {
+      "apiVersion": "meta.k8s.io/v1",
+      "kind": "CreateOptions"
+    }
+  }
+}
+EOF
