@@ -1,0 +1,74 @@
+curl -x "" -X POST \
+  -H "Content-Type: application/json" \
+  --data @- \
+  -k https://sysdig-shield-cluster.sysdig.svc.cluster.local:6443/k8s-audit <<EOF
+{
+  "apiVersion": "admission.k8s.io/v1",
+  "kind": "AdmissionReview",
+  "request": {
+    "uid": "705ab4f5-6393-11e8-b7cc-42010a800002",
+    "kind": {
+      "group": "",
+      "version": "v1",
+      "kind": "Service"
+    },
+    "resource": {
+      "group": "",
+      "version": "v1",
+      "resource": "services"
+    },
+    "requestKind": {
+      "group": "",
+      "version": "v1",
+      "kind": "Service"
+    },
+    "requestResource": {
+      "group": "",
+      "version": "v1",
+      "resource": "services"
+    },
+    "name": "my-sample-service",
+    "namespace": "default",
+    "operation": "CREATE",
+    "userInfo": {
+      "username": "system:serviceaccount:kube-system:default",
+      "uid": "21952136-1e6a-4b9e-9e7b-8b9a2f6a7d8c",
+      "groups": [
+        "system:serviceaccounts",
+        "system:serviceaccounts:kube-system",
+        "system:authenticated"
+      ]
+    },
+    "object": {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "my-sample-service",
+        "namespace": "default",
+        "labels": {
+          "app": "my-app"
+        }
+      },
+      "spec": {
+        "selector": {
+          "app": "my-app"
+        },
+        "ports": [
+          {
+            "protocol": "TCP",
+            "port": 80,
+            "targetPort": 8080
+          }
+        ],
+        "type": "ClusterIP"
+      }
+    },
+    "oldObject": null,
+    "dryRun": false,
+    "options": {
+      "apiVersion": "meta.k8s.io/v1",
+      "kind": "CreateOptions"
+    }
+  }
+}
+EOF
